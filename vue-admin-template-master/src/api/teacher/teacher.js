@@ -18,7 +18,9 @@ export  default {
   getTeacherListPage(current,limit,teacherQuery){
     return request({
       //url:'/eduservice/edu-teacher/pageTeacherCondition/'+current+'/'+limit,
-      url:'/eduservice/edu-teacher/pageTeacherCondition/${current}/${limit}',
+      //url:'/eduservice/teacher/pageTeacherCondition/${current}/${limit}'
+      // ``  不是单引号  不然                          这里不会变色
+      url:`/eduservice/teacher/pageTeacherCondition/${current}/${limit}`,
       method:'post',
       //teacherquery条件对象   后端使用RequestBody获取数据
       //data 表示把对象转换成json传递到接口中去
