@@ -100,13 +100,25 @@
 teacher.getTeacherInfo(id).then(response=>{
   this.teacher=response.data.items;
 })
-        }
-      },
-      created(){
+        },
+        init(){
+          //路径有id值  从修改那里过来的
           if(this.$route.params && this.$route.params.id){
             const id=this.$route.params.id;
             this.getInfo(id)
+          }else{//没有id值  整个表单要为空
+            this.teacher={}
           }
+        }
+      },
+      created(){
+         this.init()
+      },
+      watch: {//监听
+        $route(to, from) {//路由变化方式
+          console.log('watch $route')
+          this.init()
+        }
       }
     }
 </script>
