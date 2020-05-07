@@ -32,5 +32,12 @@ export  default {
       url:`/eduservice/teacher/${id}`,
       method:'delete'
     })
+  },
+  addTeacher(eduTeacher){
+    return request({
+      url:'/eduservice/teacher/addTeacher',
+      method:'post',
+      data:eduTeacher
+    })
   }
 }
