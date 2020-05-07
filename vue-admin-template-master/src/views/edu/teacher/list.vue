@@ -39,6 +39,15 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <el-pagination
+      :current-page="page"
+      :page-size="limit"
+      :total="total"
+      style="padding: 30px 0; text-align: center;"
+      layout="total, prev, pager, next, jumper"
+      @current-change="getList"
+    />
   </div>
 </template>
 
@@ -66,7 +75,8 @@
       },
       methods:{//创建具体的方法，调用teacher.js定义的方法
         //讲师列表方法
-        getList(){
+        getList(page=1){//分页点击时需要的当前页数  默认是1   每次点击都是不同的值
+          this.page=page
           teacher.getTeacherListPage(this.page,this.limit,this.teacherQuery).then(response=>{
           //请求成功
             //response是借口返回的数据
