@@ -50,7 +50,19 @@
         }
       },
       methods:{
-        saveOrUpdate(){
+        saveOrUpdate(){//添加或者是修改教师
+          if(this.teacher.id){
+            //有id  就是修改
+            this.updateTeacher();
+          }else{
+            //添加教师
+            this.save();
+          }
+
+
+        },
+          //添加讲师的方法
+        save(){
           saveBtnDisabled:true;
           teacher.addTeacher(this.teacher).then(response=>{
             this.$message({
@@ -65,7 +77,36 @@
               message: '保存失败'
             })
           })
+        },
+        //修改讲师的方法
+      updateTeacher(){
+          teacher.updateTeacher(this.teacher).then(resp=>{
+            this.$message({
+              type: 'success',
+              message: '保存成功!'
+            })
+          }).then(response=>{
+            this.$router.push({ path: '/teacher/table' })
+          }).catch(error=>{
+            this.$message({
+              type: 'error',
+              message: '保存失败'
+            })
+          })
+      }
+        ,
+        //根据讲师id查询信息的方法
+        getInfo(id){
+teacher.getTeacherInfo(id).then(response=>{
+  this.teacher=response.data.items;
+})
         }
+      },
+      created(){
+          if(this.$route.params && this.$route.params.id){
+            const id=this.$route.params.id;
+            this.getInfo(id)
+          }
       }
     }
 </script>
