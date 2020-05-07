@@ -125,6 +125,29 @@
         resetData() {
           this.teacherQuery = {}
           this.getList()
+        },
+        removeDataById(id){
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {//点了确定之后执行then方法
+              teacher.removeDataById(id).then(response=>{
+                this.$message({
+                  type: 'success',
+                  message: '删除成功!'
+                });
+                this.getList()
+              })
+
+            }).catch(() => {
+              this.$message({
+                type: 'info',
+                message: '已取消删除'
+              });
+            });
+
+
         }
       }
     }
