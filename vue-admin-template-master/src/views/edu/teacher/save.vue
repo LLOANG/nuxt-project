@@ -25,6 +25,32 @@
       </el-form-item>
 
       <!-- 讲师头像：TODO   disabled:保存按钮是否禁用   -->
+      <!-- 讲师头像 -->
+      <el-form-item label="讲师头像">
+
+        <!-- 头衔缩略图 -->
+        <pan-thumb :image="teacher.avatar"/>
+        <!-- 文件上传按钮 -->
+        <el-button type="primary" icon="el-icon-upload" @click="imagecropperShow=true">更换头像
+        </el-button>
+
+        <!--
+    v-show：是否显示上传组件
+    :key：类似于id，如果一个页面多个图片上传控件，可以做区分
+    :url：后台上传的url地址
+    @close：关闭上传组件
+    @crop-upload-success：上传成功后的回调 -->
+        <image-cropper
+          v-show="imagecropperShow"
+          :width="300"
+          :height="300"
+          :key="imagecropperKey"
+          :url="BASE_API+'/eduoss/fileoss/upload'"
+          field="file"
+          @close="close"
+          @crop-upload-success="cropSuccess"/>
+
+      </el-form-item>
 
       <el-form-item>
         <el-button :disabled="saveBtnDisabled" type="primary" @click="saveOrUpdate">保存</el-button>
@@ -35,7 +61,10 @@
 
 <script>
   import teacher from '@/api/teacher/teacher'
+  import ImageCropper from '@/components/ImageCropper'
+  import PanThumb from '@/components/PanThumb'
     export default {
+      components: { ImageCropper, PanThumb },//对引入的组件进行声明
         name: "save",
       data(){
           return{
@@ -46,7 +75,11 @@
               career:'',
               intro:''
             },
-            saveBtnDisabled:false
+            saveBtnDisabled:false,
+            //上传弹框组件是否显示
+            imagecropperShow:false,
+            imagecropperKey:0,
+            BASE_API:process.env.BASE_API       //获取dev.env.js中的地址
         }
       },
       methods:{
@@ -109,6 +142,18 @@ teacher.getTeacherInfo(id).then(response=>{
           }else{//没有id值  整个表单要为空
             this.teacher={}
           }
+        },
+        close(){//添加图片弹框关闭
+this.imagecropperShow=false;
+          // 上传成功后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+          this.imagecropperKey = this.imagecropperKey + 1
+        },
+        cropSuccess(data){
+          this.imagecropperShow=false;
+//上传成功后  返回的url是阿里云的url
+          this.teacher.avatar=data.url
+          // 上传成功后，重新打开上传组件时初始化组件，否则显示上一次的上传结果
+          this.imagecropperKey = this.imagecropperKey + 1
         }
       },
       created(){
