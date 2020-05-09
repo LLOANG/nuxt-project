@@ -35,6 +35,7 @@
     },
 
     methods: {
+      //value是输入框里面输入要搜索的值   data是一个一级节点   会对所有的节点都调用这个方法
       filterNode(value, data) {
         if (!value) return true
         return data.title.toLowerCase().indexOf(value.toLowerCase()) !== -1
