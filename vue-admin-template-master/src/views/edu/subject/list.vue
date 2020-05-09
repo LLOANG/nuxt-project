@@ -37,7 +37,7 @@
     methods: {
       filterNode(value, data) {
         if (!value) return true
-        return data.label.indexOf(value) !== -1
+        return data.title.toLowerCase().indexOf(value.toLowerCase()) !== -1
       },
       getList(){
         subject.getSubjectList().then(response=>{
