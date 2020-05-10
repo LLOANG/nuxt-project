@@ -121,6 +121,7 @@
           for (let i=0;i<this.oneSubjectList.length;i++){
             if(this.oneSubjectList[i].id===value){
               this.twoSubjectList=this.oneSubjectList[i].children;
+              this.courseInfo.subjectId="";
             }
           }
         },
