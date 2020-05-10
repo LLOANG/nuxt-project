@@ -199,6 +199,28 @@ course.getCourseInfoId(this.courseId).then(res=> {
           })
         },
         saveOrUpdate(){
+          //判断添加还是修改
+          if(!this.courseInfo.id) {
+            //添加
+            this.save()
+          } else {
+            this.update()
+          }
+
+        },
+        update(){
+          course.updateCourseInfo(this.courseInfo)
+            .then(response => {
+              //提示
+              this.$message({
+                type: 'success',
+                message: '修改课程信息成功!'
+              });
+              //跳转到第二步
+              this.$router.push({path:'/course/chapter/'+this.courseId})
+            })
+        },
+        save(){
           course.saveCourseInfo(this.courseInfo).then(response=>{
             this.$message({
               type: 'success',
@@ -207,7 +229,6 @@ course.getCourseInfoId(this.courseId).then(res=> {
             //跳转到第二步
             this.$router.push({path:`/course/chapter/`+response.data.courseId})
           })
-
         },
         //查询所有课程
         getOneSubjectList(){
