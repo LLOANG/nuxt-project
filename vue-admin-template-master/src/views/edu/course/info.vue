@@ -137,10 +137,30 @@
         this.getOneSubjectList();
       },
       methods:{
+
         getInfo(){
-course.getCourseInfoId(this.courseId).then(res=>{
-  this.courseInfo=res.data.course;
+course.getCourseInfoId(this.courseId).then(res=> {
+  this.courseInfo = res.data.course;
+  //有bug   二级分类信息没有显示  根据这个courseId
+  //1 查询所有的分类，包含一级和二级
+  subject.getSubjectList().then(response => {
+    //2 获取所有一级分类
+    this.oneSubjectList = response.data.list
+    //3 把所有的一级分类数组进行遍历，
+    for (var i = 0; i < this.oneSubjectList.length; i++) {
+      //获取每个一级分类
+      var oneSubject = this.oneSubjectList[i]
+      //比较当前courseInfo里面一级分类id和所有的一级分类id
+      if (this.courseInfo.subjectParentId == oneSubject.id) {
+        //获取一级分类所有的二级分类
+        this.twoSubjectList = oneSubject.children
+      }
+    }
+  })
+  //初始化所有讲师
+  this.getTeacherList()
 })
+
         },
           //上传之前
         beforeAvatarUpload(file){
