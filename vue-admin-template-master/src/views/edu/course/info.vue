@@ -127,11 +127,21 @@
           }
       },
       created(){
+        if(this.$route.params && this.$route.params.id){//id来自chapter页面的回显需要
+          this.courseId=this.$route.params.id;
+          //调用根据id查询课程的方法
+          this.getInfo()
+        }
         //初始化所有讲师
         this.getTeacherList();
         this.getOneSubjectList();
       },
       methods:{
+        getInfo(){
+course.getCourseInfoId(this.courseId).then(res=>{
+  this.courseInfo=res.data.course;
+})
+        },
           //上传之前
         beforeAvatarUpload(file){
           const isJPG = file.type === 'image/jpeg'

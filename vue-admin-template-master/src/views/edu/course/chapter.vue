@@ -74,7 +74,7 @@
           this.$router.push({path:`/course/publish/1`})
         },
         previous(){
-          this.$router.push({path:`/course/info/1`})
+          this.$router.push({path:`/course/info/`+this.courseId})
         },
         //根据课程id查询章节和小节
         getChapterVideo(courseId){
