@@ -12,7 +12,23 @@
 
     <el-form label-width="120px">
 
-      <el-button type="text">添加章节</el-button>
+      <el-button type="text" @click="openChapterDialog()">添加章节</el-button>
+      <!-- 添加和修改章节表单 -->
+      <el-dialog :visible.sync="dialogChapterFormVisible" title="添加章节">
+        <el-form :model="chapter" label-width="120px">
+          <el-form-item label="章节标题">
+            <el-input v-model="chapter.title"/>
+          </el-form-item>
+          <el-form-item label="章节排序">
+            <el-input-number v-model="chapter.sort" :min="0" controls-position="right"/>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogChapterFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="saveOrUpdate">确 定</el-button>
+        </div>
+      </el-dialog>
+
       <!-- 章节 -->
       <ul class="chanpterList">
         <li
@@ -22,8 +38,7 @@
             {{ chapter.title }}
 
             <span class="acts">
-                <el-button type="text">添加课时</el-button>
-                <el-button style="" type="text">编辑</el-button>
+                <el-button style="" type="text" @click="openEditChapter(chapter.id)">编辑</el-button>
                 <el-button type="text">删除</el-button>
             </span>
           </p>
@@ -59,7 +74,12 @@
         return{
           saveBtnDisabled:false,
           chapterVideoList:[],
-          courseId:''
+          courseId:'',
+          dialogChapterFormVisible:false,
+          chapter:{
+            title:'',
+            sort:0
+          }
         }
       },
       created(){
@@ -77,9 +97,65 @@
           this.$router.push({path:`/course/info/`+this.courseId})
         },
         //根据课程id查询章节和小节
-        getChapterVideo(courseId){
-          chapter.getAllChapterVideo(courseId).then(res=>{
+        getChapterVideo(){
+          chapter.getAllChapterVideo(this.courseId).then(res=>{
 this.chapterVideoList=res.data.items;
+          })
+        },
+        saveOrUpdate() {
+          this.saveBtnDisabled = true
+          if (!this.chapter.id) {
+            this.addChapter()
+          } else {
+            this.updateChapter()
+          }
+        },
+
+        addChapter() {
+          this.chapter.courseId = this.courseId  /*存储的时候需要这个courseId*/
+          chapter.addChapter(this.chapter).then(response => {
+            //关闭弹框
+            this.dialogChapterFormVisible=false;
+            this.$message({
+              type: 'success',
+              message: '保存成功!'
+            })
+            //刷新页面
+            this.getChapterVideo();
+          }).catch((response) => {
+            this.$message({
+              type: 'error',
+              message: response.message
+            })
+          })
+        },
+
+        updateChapter() {
+          chapter.updateChapter(this.chapter)
+            .then(response =>  {
+              //关闭弹框
+              this.dialogChapterFormVisible = false
+              //提示
+              this.$message({
+                type: 'success',
+                message: '修改章节成功!'
+              });
+              //刷新页面
+              this.getChapterVideo()
+            })
+        },
+        openChapterDialog(){
+          //弹框
+          this.dialogChapterFormVisible = true
+          //清空表单
+          this.chapter.title='';
+          this.chapter.sort=0;
+
+        },
+        openEditChapter(chapterId) {
+          this.dialogChapterFormVisible = true
+          chapter.getChapter(chapterId).then(response => {
+            this.chapter = response.data.chapter
           })
         }
       }
