@@ -17,13 +17,28 @@
         <el-form-item label="课程标题">
           <el-input v-model="courseInfo.title" placeholder=" 示例：机器学习项目课：从基础到搭建项目视频课程。专业名称注意大小写"/>
         </el-form-item>
+
+        <!-- 课程讲师 TODO -->
+        <el-form-item label="课程讲师">
+          <el-select
+            v-model="courseInfo.teacherId"
+            placeholder="请选择">
+            <el-option
+              v-for="teacher in teacherList"
+              :key="teacher.id"
+              :label="teacher.name"
+              :value="teacher.id"/>
+          </el-select>
+        </el-form-item>
+
+
         <el-form-item label="总课时">
           <el-input-number :min="0" v-model="courseInfo.lessonNum" controls-position="right" placeholder="请填写课程的总课时数"/>
         </el-form-item>
 
         <!-- 所属分类 TODO -->
 
-        <!-- 课程讲师 TODO -->
+
 
         <el-form-item label="课程简介">
           <el-input  v-model="courseInfo.description" controls-position="right" placeholder="请填写课程的总课时数"/>
@@ -61,13 +76,23 @@
             description: '',
             cover: '',
             price: 0
-          }
+          },
+            teacherList:[//封装所有讲师
+
+            ]
           }
       },
       created(){
-
+        //初始化所有讲师
+        this.getTeacherList();
       },
       methods:{
+          //查询所有讲师
+        getTeacherList(){
+          course.getTeacherList().then(res=>{
+            this.teacherList=res.data.items;
+          })
+        },
         saveOrUpdate(){
           course.saveCourseInfo(this.courseInfo).then(response=>{
             this.$message({

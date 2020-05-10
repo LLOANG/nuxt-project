@@ -9,5 +9,11 @@ export default {
       method: 'post',
       data: courseInfo
     })
+  },
+  getTeacherList(){
+    return request({
+      url: `/eduservice/teacher/findAll`,
+      method: 'get'
+    })
   }
 }
