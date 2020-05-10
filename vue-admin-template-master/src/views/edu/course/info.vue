@@ -17,6 +17,29 @@
         <el-form-item label="课程标题">
           <el-input v-model="courseInfo.title" placeholder=" 示例：机器学习项目课：从基础到搭建项目视频课程。专业名称注意大小写"/>
         </el-form-item>
+        <!-- 所属分类 TODO -->
+        <el-form-item label="课程类别">
+          <el-select
+            v-model="courseInfo.subjectParentId"
+            placeholder="一级分类" @change="subjectLevelOneChanged">
+            <el-option
+              v-for="subject in oneSubjectList"
+              :key="subject.id"
+              :label="subject.title"
+              :value="subject.id"/>
+          </el-select>
+          <!-- 二级分类 -->
+          <el-select v-model="courseInfo.subjectId" placeholder="二级分类">
+            <el-option
+              v-for="subject in twoSubjectList"
+              :key="subject.value"
+              :label="subject.title"
+              :value="subject.id"/>
+          </el-select>
+        </el-form-item>
+
+
+
 
         <!-- 课程讲师 TODO -->
         <el-form-item label="课程讲师">
@@ -63,6 +86,7 @@
 
 <script>
   import course from '@/api/teacher/course'
+  import subject from '@/api/teacher/subject'
     export default {
         name: "info",
       data(){
@@ -70,23 +94,36 @@
             saveBtnDisabled:false,
             courseInfo:{
             title: '',
-            subjectId: '',
+            subjectId: '',//二级分类id
+              subjectParentId:'',//一级分类id
             teacherId: '',
             lessonNum: 0,
             description: '',
             cover: '',
             price: 0
           },
-            teacherList:[//封装所有讲师
+            teacherList:[//封装所有讲师   这定义的是数组 []
 
-            ]
+            ],
+            oneSubjectList:[],
+            twoSubjectList:[]
           }
       },
       created(){
         //初始化所有讲师
         this.getTeacherList();
+        this.getOneSubjectList();
       },
       methods:{
+          //点击一个一级分类  触发change 显示对应二级分类  value是一级分类的id
+        subjectLevelOneChanged(value){
+          //遍历所有分类
+          for (let i=0;i<this.oneSubjectList.length;i++){
+            if(this.oneSubjectList[i].id===value){
+              this.twoSubjectList=this.oneSubjectList[i].children;
+            }
+          }
+        },
           //查询所有讲师
         getTeacherList(){
           course.getTeacherList().then(res=>{
@@ -103,6 +140,13 @@
             this.$router.push({path:`/course/chapter/`+response.data.courseId})
           })
 
+        },
+        //查询所有课程
+        getOneSubjectList(){
+          subject.getSubjectList().then(res=>{
+            console.log(res)
+            this.oneSubjectList=res.data.list;
+          })
         }
       }
     }
