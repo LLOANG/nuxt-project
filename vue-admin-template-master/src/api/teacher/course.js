@@ -30,5 +30,19 @@ export default {
       method: 'post',
       data: courseInfo
     })
+  },
+
+  getCoursePublishInfoById(id) {
+    return request({
+      url: `/eduservice/course/coursePublish/`+id,
+      method: 'get'
+    })
+  },
+
+  publishCourse(id) {
+    return request({
+      url: `${api_name}/publish-course/${id}`,
+      method: 'put'
+    })
   }
 }
