@@ -56,5 +56,11 @@ export default {
       //data 表示把对象转换成json传递到接口中去
       data: CourseQuery
     })
+  },
+  removeById(id) {
+    return request({
+      url: `/eduservice/course/delete/`+id,
+      method: 'delete'
+    })
   }
 }

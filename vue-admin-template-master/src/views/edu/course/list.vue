@@ -125,6 +125,28 @@
       resetData() {
         this.courseQuery = {}
         this.getList()
+      },
+      removeDataById(id){
+        this.$confirm('此操作将永久删除该课程，以及该课程下的章节和视频，是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+       return   course.removeById(id)
+        }).then(() => {
+          this.getList()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        }).catch((response) => { // 失败
+          if (response === 'cancel') {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          }
+        })
       }
     }
   }
