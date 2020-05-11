@@ -51,8 +51,13 @@
         },
 
         publish() {
-          console.log('publish')
-          this.$router.push({ path: '/course/list/'+this.courseId })
+          course.publishCourse(this.courseId).then(response => {
+            this.$message({
+              type: 'success',
+              message: '添加课程成功!'
+            });
+            this.$router.push({ path: '/course/list' })
+          })
         },
         init() {
           if (this.$route.params && this.$route.params.id) {

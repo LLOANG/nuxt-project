@@ -41,7 +41,7 @@ export default {
 
   publishCourse(id) {
     return request({
-      url: `${api_name}/publish-course/${id}`,
+      url: `/eduservice/course/publishCourse/`+id,
       method: 'put'
     })
   }

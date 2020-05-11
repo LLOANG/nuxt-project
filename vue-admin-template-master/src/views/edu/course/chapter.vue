@@ -99,6 +99,7 @@
       data(){
         return{
           saveVideoBtnDisabled:false,
+          saveBtnDisabled:false,
           chapterVideoList:[],
           courseId:'',
           dialogChapterFormVisible:false,//章节弹框
