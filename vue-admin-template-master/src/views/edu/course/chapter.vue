@@ -208,6 +208,7 @@ this.addVideo();
         },
         addVideo(){//添加小节
           this.video.courseId = this.courseId
+          this.fileList=[];
           video.addVideo(this.video).then(response => {
             //关小节弹框
             this.dialogVideoFormVisible=false;
@@ -217,6 +218,7 @@ this.addVideo();
             })
             //刷新页面
             this.getChapterVideo();
+            this.saveBtnDisabled=false;
           })
         },
         //出现小节弹框的方法
