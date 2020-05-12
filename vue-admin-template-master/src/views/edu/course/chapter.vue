@@ -145,6 +145,25 @@
 
       },
       methods:{
+          //点击×后会弹出一个确认框 确认删除视频
+        handleVodRemove(){
+video.removeAliyunVod(this.video.videoSourceId).then(res=>{
+  this.$message({
+    type: 'success',
+    message: '删除成功!'
+  })
+  //把文件列表清空
+  this.fileList=[];
+  //数据是全局的  这两个数据也要清空  不然重新打开不填数据这些已经赋值了的也会传上去
+  this.video.videoSourceId = "";
+//上传视频名称赋值
+  this.video.videoOriginalName = ""
+})
+        },
+          //点击×   把视频列表中的视频插掉  同时在云端也要删掉
+        beforeVodRemove(file,fileList){
+    return this.$confirm(`确定删除${file.name}?`);
+        },
         //上传视频成功调用的方法
         handleVodUploadSuccess(response, file, fileList) {
           this.video.videoSourceId = response.data.videoId;
