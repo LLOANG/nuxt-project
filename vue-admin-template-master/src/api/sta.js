@@ -7,6 +7,13 @@ export default {
       url: '/staservice/statistics-daily/registerCount/'+day,
       method: 'post',
     })
+  },
+
+  getDataSta(searchObj) {
+    return request({
+      url: `/staservice/statistics-daily/showData/${searchObj.type}/${searchObj.begin}/${searchObj.end}`,
+      method: 'get',
+    })
   }
 }
 
